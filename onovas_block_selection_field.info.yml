@@ -1,0 +1,28 @@
+# Datos del módulo
+name: 'onovas: Block Selection Field'
+description: 'onovas: Block Selection Field - Functionalities'
+# project: 'onovas_block_selection_field'
+
+# Datos de la versión
+package: custom
+type: module
+version: '1.0.0'
+
+# Tema
+base theme: false
+
+# Configuración
+configure: onovas_block_selection_field.settings
+
+# Dependencias
+dependencies:
+  - node
+
+# Requisitos
+core_version_requirement: ^10
+requirements:
+  _permission: 'config onovas_block_selection_field'
+
+# Traducciones
+'interface translation project': onovas_block_selection_field
+'interface translation server pattern': 'modules/custom/onovas_block_selection_field/config/translations/onovas_block_selection_field.%language.po'

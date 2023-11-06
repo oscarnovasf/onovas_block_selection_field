@@ -1,0 +1,78 @@
+<?php
+
+/**
+ * @file
+ * onovas_block_selection_field.module.
+ */
+
+use Drupal\Core\Extension\Extension;
+use Drupal\Core\Render\Markup;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Url;
+
+use Drupal\onovas_block_selection_field\lib\general\MarkdownParser;
+
+/**
+ * Implements hook_help().
+ */
+function onovas_block_selection_field_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+
+    case 'help.page.onovas_block_selection_field':
+      /* Añado el contenido del archivo README.md a la ayuda del módulo */
+      $parser = new MarkdownParser();
+
+      $module_path = \Drupal::service('extension.path.resolver')
+        ->getPath('module', "onovas_block_selection_field");
+
+      $readme_ruta = $module_path . "/README.md";
+      $contenido = '';
+      if (file_exists($readme_ruta)) {
+        $contenido = file_get_contents($readme_ruta);
+        $contenido = Markup::create($parser->text($contenido));
+
+        if ($contenido) {
+          $template_path = $module_path . "/templates/custom/help.html.twig";
+          $template = file_get_contents($template_path);
+          $build = [
+            'description' => [
+              '#type' => 'inline_template',
+              '#template' => $template,
+              '#context' => [
+                'readme' => $contenido,
+              ],
+            ],
+          ];
+          return $build;
+        }
+      }
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_modules_installed().
+ */
+function onovas_block_selection_field_modules_installed($modules) {
+  if (in_array('onovas_block_selection_field', $modules)) {
+    // Be friendly to your users: what to do after install?
+    $url = Url::fromRoute('onovas_block_selection_field.settings');
+    if (PHP_SAPI != 'cli') {
+      \Drupal::messenger()->addMessage(t('You can now <a href="@url_settings">configure the onovas: Block Selection Field module</a> for your site.',
+        ['@url_settings' => $url->toString()]), 'status');
+    }
+  }
+}
+
+/**
+ * Implements hook_system_info_alter().
+ */
+function onovas_block_selection_field_system_info_alter(array &$info, Extension $file, $type) {
+  if ('theme' == $type) {
+    $config = \Drupal::configFactory()->getEditable('onovas_block_selection_field.settings');
+    if ($config->get('theme') == $file->getName()) {
+      $info['regions']['block_content'] = 'onovas: Block Selection Field';
+    }
+  }
+}

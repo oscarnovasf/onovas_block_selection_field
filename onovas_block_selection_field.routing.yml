@@ -1,0 +1,44 @@
+################################################################################
+# MENÚ GLOBAL PARA LOS MÓDULOS CUSTOM                                          #
+################################################################################
+
+# Menú de configuración para todas las herramientas.
+custom_module.global.admin:
+  path: '/admin/custom_modules'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'Custom Modules'
+  requirements:
+    _permission: 'administer site configuration'
+  options:
+    no_cache: 'TRUE'
+
+################################################################################
+# CONFIGURACIÓN DEL MÓDULO                                                     #
+################################################################################
+
+# Ruta para ver todas las herramientas de este módulo.
+custom_module.onovas_block_selection_field.admin:
+  path: '/admin/custom_modules/onovas_block_selection_field'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'onovas: Block Selection Field'
+  options:
+    _admin_route: TRUE
+  requirements:
+    _permission: 'config onovas_block_selection_field'
+
+################################################################################
+# FORMULARIOS                                                                  #
+################################################################################
+
+# Ruta para el formulario de configuración.
+onovas_block_selection_field.settings:
+  path: '/admin/custom_modules/onovas_block_selection_field/settings'
+  defaults:
+    _form: '\Drupal\onovas_block_selection_field\Form\config\SettingsForm'
+    _title: 'Settings'
+  requirements:
+    _permission: 'config onovas_block_selection_field'
+  options:
+    no_cache: 'TRUE'
